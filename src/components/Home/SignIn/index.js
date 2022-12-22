@@ -16,9 +16,9 @@ const SignIn = () =>{
 
 
   const onSubmit =(values)=>{
-    signInWithEmailAndPassword(auth ,values.Email , values.Password).then((userCredential)=>{
-      const userDetails = userCredential.user;
-      console.log(userDetails);
+    console.log(values);
+    signInAuthUserWithEmailAndPassword(values.Email , values.password).then((userCredential)=>{
+      console.log(userCredential);
            
   })}
 
@@ -42,8 +42,8 @@ const SignIn = () =>{
         span: 16,
       }}
       initialValues={{
-        Email:"email",
-        Password:"password",
+        Email:"ramannp210@gmail.com",
+        password:"jingala123",
       }}
       onFinish={onSubmit}
       onFinishFailed={onFinishFailed}
