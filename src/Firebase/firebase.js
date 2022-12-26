@@ -1,5 +1,8 @@
 import { initializeApp } from "firebase/app";
+import { getFirestore} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBmNZGUXDOV4Ri2QqngXL43F-Vn8A4aTyg",
@@ -11,9 +14,12 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const auth = getAuth();
+const storage = getStorage(app);
 
 
+export { auth, db,storage};
 
 export const signInAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
@@ -22,4 +28,3 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
 
 
- export {auth}

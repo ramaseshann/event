@@ -13,7 +13,9 @@ const Header = () => {
         </section>
         <section className='right_header flex gap-10  justify-between items-center' >
             <div className='flex items-center justify-between cursor-pointer'>
+                <NavLink to='myevents'>
                 My events
+                </NavLink>
             </div>
             <div className='flex items-center justify-between cursor-pointer'>
                 <NavLink to="signin">

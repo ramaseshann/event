@@ -1,14 +1,29 @@
 import React from 'react'
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Button, Checkbox, Form, Input } from 'antd';
 import {useNavigate} from 'react-router-dom';
+import { auth } from '../../../Firebase/firebase';
 
-import SignIn from '../SignIn';
+
+
+
 
 const SignUp = () => {
 
     let navigate = useNavigate();
-    const onFinish = (values) => {
+    const onSubmit = (values) => {
         console.log('Success:', values);
+        createUserWithEmailAndPassword(auth , values.Email , values.password).then((userCredential)=>{    
+          const user = userCredential.user;
+          console.log(user);
+          navigate('/signin');
+          }).catch((err) => {
+          const error= err.message;
+          alert(err);
+          });
+        
+        
+
         navigate('/signin');
       };
       const onFinishFailed = (errorInfo) => {
@@ -33,7 +48,7 @@ const SignUp = () => {
       initialValues={{
         remember: true,
       }}
-      onFinish={onFinish}
+      onFinish={onSubmit}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Button,  Form, Input } from 'antd';
-import { Link} from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 
 import { UserContext } from '../../../UserProvider';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -9,8 +9,8 @@ import { auth, signInAuthUserWithEmailAndPassword } from '../../../Firebase/fire
 
 const SignIn = () =>{
 
-  const {checkAuthentication } = useContext(UserContext);
-
+  const {checkAuthentication ,user} = useContext(UserContext);
+  let navigate = useNavigate();
   const onFinish = async (values) => {
   };
 
@@ -18,7 +18,11 @@ const SignIn = () =>{
   const onSubmit =(values)=>{
     console.log(values);
     signInAuthUserWithEmailAndPassword(values.Email , values.password).then((userCredential)=>{
-      console.log(userCredential);
+      console.log(userCredential);  
+      checkAuthentication();
+      navigate('/addevent');
+    
+      
            
   })}
 
@@ -26,6 +30,7 @@ const SignIn = () =>{
   const onFinishFailed = () => {
   
   }
+
 
   return (
     <div className="flex flex-col gap-10 border-2   items-center  h-screen pt-60 pl-40">
@@ -42,8 +47,8 @@ const SignIn = () =>{
         span: 16,
       }}
       initialValues={{
-        Email:"ramannp210@gmail.com",
-        password:"jingala123",
+        Email:"",
+        password:"",
       }}
       onFinish={onSubmit}
       onFinishFailed={onFinishFailed}
