@@ -27,7 +27,7 @@ import { UserContext } from "../../../UserProvider";
 import { async } from "@firebase/util";
 
 const AddEvent = ({ label }) => {
-  const { state, setState } = useContext(UserContext);
+  const { state, setState, user } = useContext(UserContext);
 
   useEffect(() => {}, []);
 
@@ -45,10 +45,10 @@ const AddEvent = ({ label }) => {
     Event_Date: "",
     Event_Time: "",
     Event_poster: "",
+    Event_User:""
   });
 
-  const dateFormat = "YYYY-MM-DD";
-  const monthFormat = "YYYY/MM";
+
 
   const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -104,8 +104,16 @@ const AddEvent = ({ label }) => {
   
   const onFinish = async(values) => {
     console.log('Success:', values);
-   
-  
+    console.log(dayjs(values.Event_Time).format("HH:mm"));
+    setDoc(doc(db, "Events", `${values.Event_Name}`),{
+      Event_Name: values.Event_Name,
+      Event_Place: values.Event_Place,
+      Event_State: values.Event_State,
+      Event_Category: values.Event_Category,
+      Event_Date: dayjs(values.Event_Date).format("YYYY-MM-DD"),
+      Event_Time: dayjs(values.Event_Time).format("HH:mm"),
+      Event_user: user.ecmail
+    });
     
   }
 
@@ -115,7 +123,7 @@ const AddEvent = ({ label }) => {
     <div className="flex  flex-col justify-center items-center h-screen gap-10">
       <h4 className="flex w-[800px]  ml-24 items-center text-[60px] justify-center">
       AddEvent
-      </h4>
+      </h4> 
       <Form
       name="basic"
       labelCol={{
@@ -156,8 +164,8 @@ const AddEvent = ({ label }) => {
         <Input />
       </Form.Item>
       <Form.Item
-        label="Event District"
-        name="Event_District"
+        label="Event Place"
+        name="Event_Place"
         rules={[
           {
             required: true,
@@ -177,8 +185,8 @@ const AddEvent = ({ label }) => {
         <DatePicker  format="YYYY-MM-DD " />
       </Form.Item>
      
-      <Form.Item name="Event_Time" label="Event Date" {...config}>
-        <TimePicker format="HH:mm " />
+      <Form.Item name="Event_Time" label="Event Time" >
+        <TimePicker  className="" />
       </Form.Item>  
 
 
