@@ -25,12 +25,14 @@ import { db, storage } from "../../../Firebase/firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { UserContext } from "../../../UserProvider";
 import { async } from "@firebase/util";
+import { Navigate, useNavigate } from "react-router-dom";
+
 
 const AddEvent = ({ label }) => {
-  const { state, setState, user } = useContext(UserContext);
-
+  const { state, setState, user ,events} = useContext(UserContext);
+  console.log(state);
   useEffect(() => {}, []);
-
+  const [labels, setLabels] = useState(label);
   const [time, setTime] = useState(moment(Date.now()).format("HH:mm"));
   const [dates, setDates] = useState("");
   const [file, setFile] = useState("");
@@ -49,7 +51,13 @@ const AddEvent = ({ label }) => {
   });
 
 
+  useEffect(()=>{
+    
+  },[labels]);
 
+
+  let navigate = useNavigate();
+    
   const handleChange = (value) => {
     console.log(`selected ${value}`);
     setSelectedOption(value);
@@ -111,10 +119,12 @@ const AddEvent = ({ label }) => {
       Event_State: values.Event_State,
       Event_Category: values.Event_Category,
       Event_Date: dayjs(values.Event_Date).format("YYYY-MM-DD"),
-      Event_Time: dayjs(values.Event_Time).format("HH:mm"),
-      Event_user: user.ecmail
+      Event_Time: dayjs(values.Event_Time).format("HH:mm:ss"),
+      Event_user: user.email
     });
-    
+
+    navigate("/myevents");
+   
   }
 
   function onFinishFailed() {}
@@ -122,7 +132,7 @@ const AddEvent = ({ label }) => {
   return (
     <div className="flex  flex-col justify-center items-center h-screen gap-10">
       <h4 className="flex w-[800px]  ml-24 items-center text-[60px] justify-center">
-      AddEvent
+      {label}
       </h4> 
       <Form
       name="basic"
@@ -132,9 +142,17 @@ const AddEvent = ({ label }) => {
       wrapperCol={{
         span: 16,
       }}
-      initialValues={{
+    
+      initialValues={ label === "Edit Event"?
+        {
         remember: true,
-      }}
+        Event_Name: state.Event_Name,
+        Event_Place: state.Event_Place,
+        Event_State: state.Event_State,
+        Event_Category: state.Event_Category,
+        Event_Date:dayjs(state.Event_Date,"YYYY-MM-DD"),
+        Event_Time: dayjs(state.Event_Time,"HH:mm:ss"),
+      }:""}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
@@ -145,7 +163,7 @@ const AddEvent = ({ label }) => {
         rules={[
           {
             required: true,
-            message: 'Please input your username!',
+            message: 'Please input your username!', 
           },
         ]}
       >

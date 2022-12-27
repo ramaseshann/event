@@ -21,9 +21,10 @@ const Home = () => {
 
         <Route path="/signup" element={<Jango><SignUp/></Jango>} />
         <Route path="/signin" element={<Jango><SignIn/></Jango>} />
-        <Route path="/addevent" element={<Jango><AddEvent/></Jango>}/>
-        <Route path="/myevents" element={<Jango><MyEvent/></Jango>}/>
-        <Route path="/myevents/edit" element={<Jango><EditEvent/></Jango>}/>
+        <Route path="/addevents" element={<Jango><AddEvent label="Add Event"/></Jango>}/>
+        <Route path="/myevents" element={<MyEvent/>}/>
+        <Route exact path="/myevents/edit" element={<EditEvent/>}/>
+
       </Routes>
     
     

@@ -74,8 +74,7 @@ const Info = () => {
       
         <h2 className='flex'>Manage your Events</h2>
         
-        <Table columns={columns} dataSource={events} />
-        {JSON.stringify(state)}
+        
     </div>
   )
 }

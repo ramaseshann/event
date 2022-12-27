@@ -20,7 +20,7 @@ const SignIn = () =>{
     signInAuthUserWithEmailAndPassword(values.Email , values.password).then((userCredential)=>{
       console.log(userCredential);  
       checkAuthentication();
-      navigate('/addevent');
+      navigate('/');
     
       
            
