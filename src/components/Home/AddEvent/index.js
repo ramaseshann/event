@@ -27,9 +27,9 @@ import { UserContext } from "../../../UserProvider";
 import { async } from "@firebase/util";
 import { Navigate, useNavigate } from "react-router-dom";
 
-
 const AddEvent = ({ label }) => {
-  const { state, setState, user ,events} = useContext(UserContext);
+  const { state, setState, user, events, change, setChange } =
+    useContext(UserContext);
   console.log(state);
   useEffect(() => {}, []);
   const [labels, setLabels] = useState(label);
@@ -47,30 +47,13 @@ const AddEvent = ({ label }) => {
     Event_Date: "",
     Event_Time: "",
     Event_poster: "",
-    Event_User:""
+    Event_User: "",
+    Event_Search: [],
   });
 
-
-  useEffect(()=>{
-    
-  },[labels]);
-
+  useEffect(() => {}, [labels]);
 
   let navigate = useNavigate();
-    
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedOption(value);
-  };
-
-  const onChange = (date, dateString) => {
-    console.log(date);
-    setEvent({
-      ...event,
-      Event_Date: dateString,
-    });
-    console.log(dateString);
-  };
 
   const config = {
     rules: [
@@ -109,123 +92,132 @@ const AddEvent = ({ label }) => {
   //     });
   // }
 
-  
-  const onFinish = async(values) => {
-    console.log('Success:', values);
+  const onFinish = async (values) => {
+    console.log("Success:", values);
     console.log(dayjs(values.Event_Time).format("HH:mm"));
-    setDoc(doc(db, "Events", `${values.Event_Name}`),{
+    let array = values.Event_Name.split(" ");
+    array.push(values.Event_Name);
+
+    setDoc(doc(db, "Events", `${values.Event_Name}`), {
       Event_Name: values.Event_Name,
       Event_Place: values.Event_Place,
       Event_State: values.Event_State,
       Event_Category: values.Event_Category,
       Event_Date: dayjs(values.Event_Date).format("YYYY-MM-DD"),
       Event_Time: dayjs(values.Event_Time).format("HH:mm:ss"),
-      Event_user: user.email
+      Event_user: user.email,
+      Event_search: array,
     });
+    if (labels === "Edit Event") {
+      setChange(true);
+    }
 
     navigate("/myevents");
-   
-  }
+  };
 
   function onFinishFailed() {}
 
   return (
     <div className="flex  flex-col justify-center items-center h-screen gap-10">
       <h4 className="flex w-[800px]  ml-24 items-center text-[60px] justify-center">
-      {label}
-      </h4> 
+        {label}
+      </h4>
       <Form
-      name="basic"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
-    
-      initialValues={ label === "Edit Event"?
-        {
-        remember: true,
-        Event_Name: state.Event_Name,
-        Event_Place: state.Event_Place,
-        Event_State: state.Event_State,
-        Event_Category: state.Event_Category,
-        Event_Date:dayjs(state.Event_Date,"YYYY-MM-DD"),
-        Event_Time: dayjs(state.Event_Time,"HH:mm:ss"),
-      }:""}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item
-        label="Event Name"
-        name="Event_Name"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your username!', 
-          },
-        ]}
+        name="basic"
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 16,
+        }}
+        initialValues={
+          label === "Edit Event"
+            ? {
+                remember: true,
+                Event_Name: state.Event_Name,
+                Event_Place: state.Event_Place,
+                Event_State: state.Event_State,
+                Event_Category: state.Event_Category,
+                Event_Date: dayjs(state.Event_Date, "YYYY-MM-DD"),
+                Event_Time: dayjs(state.Event_Time, "HH:mm:ss"),
+              }
+            : ""
+        }
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
       >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Event State"
-        name="Event_State"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your username!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Event Place"
-        name="Event_Place"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your username!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item label="Event Category" name="Event_Category">
+        <Form.Item
+          label="Event Name"
+          name="Event_Name"
+          rules={[
+            {
+              required: true,
+              message: "Please input Event Name!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Event State"
+          name="Event_State"
+          rules={[
+            {
+              required: true,
+              message: "Please input your Event State!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Event Place"
+          name="Event_Place"
+          rules={[
+            {
+              required: true,
+              message: "Please input Event Place!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item label="Event Category" name="Event_Category">
           <Select>
-            <Select.Option value="demo">Demo</Select.Option>
+            <Select.Option value="Music">Music</Select.Option>
+            <Select.Option value="Dance">Dance</Select.Option>
+            <Select.Option value="Entertainment">Entertainment</Select.Option>
+            <Select.Option value="Sports">Sports</Select.Option>
+            <Select.Option value="yoga">Yoga</Select.Option>
           </Select>
         </Form.Item>
-      
+
         <Form.Item name="Event_Date" label="Event Date" {...config}>
-        <DatePicker  format="YYYY-MM-DD " />
-      </Form.Item>
-     
-      <Form.Item name="Event_Time" label="Event Time" >
-        <TimePicker  className="" />
-      </Form.Item>  
+          <DatePicker format="YYYY-MM-DD " />
+        </Form.Item>
 
+        <Form.Item name="Event_Time" label="Event Time">
+          <TimePicker className="" />
+        </Form.Item>
 
-      <Form.Item
-        wrapperCol={{
-          xs: {
-            span: 24,
-            offset: 0,
-          },
-          sm: {
-            span: 16,
-            offset: 8,
-          },
-        }}
-      >
-        <Button type="primary" htmlType="submit" className="bg-yellow-600">
-          Submit
-        </Button>
-      </Form.Item>
+        <Form.Item
+          wrapperCol={{
+            xs: {
+              span: 24,
+              offset: 0,
+            },
+            sm: {
+              span: 16,
+              offset: 8,
+            },
+          }}
+        >
+          <Button type="primary" htmlType="submit" className="bg-yellow-600">
+            Submit
+          </Button>
+        </Form.Item>
       </Form>
-
     </div>
   );
 };

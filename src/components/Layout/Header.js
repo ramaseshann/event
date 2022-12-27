@@ -18,9 +18,12 @@ const Header = () => {
   return (
     <header className='shadow-lg h-24 flex w-full justify-center items-center'>
     <div className='container  flex items-center justify-between px-[100px] border-2'>
+        <NavLink to="/">
         <section className='left_header w-80'>
-            {/* Event logo with image */}hi
+            {/* Event logo with image */}Home
         </section>
+        </NavLink>
+       
 
         <section className='right_header flex gap-10  justify-between items-center' >
         {user && <div className='flex items-center justify-between cursor-pointer'>
