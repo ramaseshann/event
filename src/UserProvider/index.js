@@ -7,21 +7,21 @@ import useLocalStorage from "../Hooks/localstorage";
 export const UserContext = React.createContext({
   user: null,
   setUser: () => null,
-  checkAuthentication:()=>null,
+  checkAuthentication: () => null,
   events: [],
-  setEvents: ()=>null,
+  setEvents: () => null,
   state: null,
-  setState: ()=>null,
-  change:false,
-  setChange:()=>{},
-  
+  setState: () => null,
+  change: false,
+  setChange: () => {},
 });
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); //used in header component,
- const[events, setEvents] = useState([]);
- const [state, setState] = useLocalStorage("state",{});
- const[change, setChange] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [state, setState] = useLocalStorage("state", {});
+  //  const [localStorage, setLocalStorage] = useLocalStorage("localstorage",{});
+  const [change, setChange] = useState(false);
   useEffect(() => {
     // used when the user is logged in or not ,checking from firebase.
     // if true , then set loggedIn to true
@@ -29,54 +29,44 @@ const UserProvider = ({ children }) => {
     // depending on whether the user is logged in or not,place at Header Component for changing the user status
     checkAuthentication();
     //  async function getdetails() {
-    //   const eventsof = collection(db,'Events');           
+    //   const eventsof = collection(db,'Events');
     //   const EventSnapshot = await getDocs(eventsof);
     //   const eventList = EventSnapshot.docs.map(doc => doc.data());
-     
+
     //  console.log(eventList,"nthai");
     //  setEvents(eventList);
-     
+
     //  }
     //  getdetails();
-    
   }, []);
 
+  const checkAuthentication = async () => {
+    console.log("ji");
+    const auth = await authorize();
 
-  
-   const checkAuthentication = async() => {
-    console.log("ji");  
-    const auth= await authorize();
-  
     if (auth) {
       setUser(auth);
       console.log(auth);
-      
     } else {
       setUser(null);
-      console.log("no user")
+      console.log("no user");
     }
-    
-
-  }
-
-
-
-
-
-  
-
-  
+  };
 
   return (
-    <UserContext.Provider value={{ user, 
-                                    setUser , 
-                                    checkAuthentication,
-                                    events,
-                                    setEvents,
-                                    state,
-                                    setState,
-                                    change,
-                                    setChange}}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        checkAuthentication,
+        events,
+        setEvents,
+        state,
+        setState,
+        change,
+        setChange,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

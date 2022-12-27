@@ -9,6 +9,7 @@ import {
   TimePicker,
   Upload,
 } from "antd";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import dayjs, { Dayjs } from "dayjs";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
@@ -22,7 +23,7 @@ import {
 } from "firebase/firestore";
 import { UploadOutlined } from "@ant-design/icons";
 import { db, storage } from "../../../Firebase/firebase";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { UserContext } from "../../../UserProvider";
 import { async } from "@firebase/util";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -52,6 +53,13 @@ const AddEvent = ({ label }) => {
   });
 
   useEffect(() => {}, [labels]);
+
+  const getFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
 
   let navigate = useNavigate();
 
@@ -94,6 +102,15 @@ const AddEvent = ({ label }) => {
 
   const onFinish = async (values) => {
     console.log("Success:", values);
+    let imageUrl = "";
+    if (values.banner.length) {
+      if (values.banner[0].url) {
+        imageUrl = values.banner[0].url;
+      } else {
+        imageUrl = await fileUpload(values.banner[0].originFileObj);
+      }
+    }
+    console.log(imageUrl);
     console.log(dayjs(values.Event_Time).format("HH:mm"));
     let array = values.Event_Name.split(" ");
     array.push(values.Event_Name);
@@ -107,6 +124,7 @@ const AddEvent = ({ label }) => {
       Event_Time: dayjs(values.Event_Time).format("HH:mm:ss"),
       Event_user: user.email,
       Event_search: array,
+      Event_poster: imageUrl,
     });
     if (labels === "Edit Event") {
       setChange(true);
@@ -116,6 +134,23 @@ const AddEvent = ({ label }) => {
   };
 
   function onFinishFailed() {}
+
+  const fileUpload = async (file, name = "test", path = "") => {
+    
+    try {
+      const storage = getStorage();
+      const storageRef = ref(storage, file.name);
+
+      // 'file' comes from the Blob or File API
+      return uploadBytes(storageRef, file).then((snapshot) => {
+        return getDownloadURL(snapshot.ref).then((downloadURL) => downloadURL);
+      });
+    } catch (e) {
+      console.log("Error-file-upload", e);
+      return false;
+    }
+   
+  };
 
   return (
     <div className="flex  flex-col justify-center items-center h-screen gap-10">
@@ -140,6 +175,7 @@ const AddEvent = ({ label }) => {
                 Event_Category: state.Event_Category,
                 Event_Date: dayjs(state.Event_Date, "YYYY-MM-DD"),
                 Event_Time: dayjs(state.Event_Time, "HH:mm:ss"),
+                banner: state.Event_poster ? [{ url: state.Event_poster }] : [],
               }
             : ""
         }
@@ -200,7 +236,20 @@ const AddEvent = ({ label }) => {
         <Form.Item name="Event_Time" label="Event Time">
           <TimePicker className="" />
         </Form.Item>
-
+        <Form.Item
+          name="banner"
+          label="Upload"
+          valuePropName="fileList"
+          getValueFromEvent={getFile}
+          rules={[{ required: true, message: "Please select image!" }]}
+        >
+          <Upload maxCount={1} action="/upload.do" listType="picture-card">
+            <div>
+              {/* <PlusOutlined /> */}
+              <div style={{ marginTop: 8 }}>Select</div>
+            </div>
+          </Upload>
+        </Form.Item>
         <Form.Item
           wrapperCol={{
             xs: {
