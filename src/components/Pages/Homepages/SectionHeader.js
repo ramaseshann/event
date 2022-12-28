@@ -1,6 +1,6 @@
 import { Button, Form, Input, Select } from "antd";
 import React, { useContext, useEffect} from "react";
-import Typical from "react-typical";
+// import Typical from "react-typical";
 import { listEvents } from "../../../Firebase/firebaseutils";
 import { UserContext } from "../../../UserProvider";
 
@@ -26,12 +26,12 @@ const SectionHeader = () => {
     <section className="h-[550px] flex flex-col gap-10 justify-center mt-10  ">
       <div className="flex flex-col">
         <div className="text-[56px] text-bold items-center flex justify-center   ">
-          Discover &nbsp;
-          <Typical
+          Discover  Events&nbsp;
+          {/* <Typical
             loop={Infinity}
             wrapper="b"
             steps={["Events", 4000, "200M+ Events", 6000]}
-          />
+          /> */}
         </div>
         <p className="flex justify-center text-[36px] text-bold">
           Happening in your city
