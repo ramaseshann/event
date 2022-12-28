@@ -32,7 +32,7 @@ const Myevent = () => {
   }, [change, user]);
 
   async function handleDelete(e, record) {
-    await deleteDoc(doc(db, "Events", `${record.Event_Name}`));
+    await deleteDoc(doc(db, "Events", `${record.id}`));
 
     getdetails();
   }
