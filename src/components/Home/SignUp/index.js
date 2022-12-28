@@ -1,28 +1,26 @@
 import React from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../../Firebase/firebase";
 
 const SignUp = () => {
   let navigate = useNavigate();
   const onSubmit = (values) => {
-    console.log("Success:", values);
     createUserWithEmailAndPassword(auth, values.Email, values.password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user);
+
         navigate("/signin");
       })
-      .catch((err) => {
-        const error = err.message;
-        alert(err);
+      .catch((error) => {
+        message.error(error.message);
       });
 
     navigate("/signin");
   };
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    
   };
 
   return (

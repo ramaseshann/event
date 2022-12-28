@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
 import { UserContext } from "../../../UserProvider";
@@ -15,14 +15,14 @@ const SignIn = () => {
   const onFinish = async (values) => {};
 
   const onSubmit = (values) => {
-    console.log(values);
-    signInAuthUserWithEmailAndPassword(values.Email, values.password).then(
-      (userCredential) => {
-        console.log(userCredential);
+    signInAuthUserWithEmailAndPassword(values.Email, values.password)
+      .then((userCredential) => {
         checkAuthentication();
         navigate("/");
-      }
-    );
+      })
+      .catch((error) => {
+        message.error(error.message);
+      });
   };
 
   const onFinishFailed = () => {};

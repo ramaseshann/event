@@ -1,58 +1,27 @@
 import {
-  App,
   Button,
   DatePicker,
   Form,
   Input,
-  message,
   Select,
   TimePicker,
   Upload,
 } from "antd";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-import dayjs, { Dayjs } from "dayjs";
-import moment from "moment";
+import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
-import { DatePickerProps } from "antd";
-import {
-  collection,
-  doc,
-  addDoc,
-  setDoc,
-  getFirestore,
-} from "firebase/firestore";
-import { UploadOutlined } from "@ant-design/icons";
-import { db, storage } from "../../../Firebase/firebase";
-import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../../../Firebase/firebase";
+import { getDownloadURL } from "firebase/storage";
 import { UserContext } from "../../../UserProvider";
-import { async } from "@firebase/util";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AddEvent = ({ label }) => {
-  const { state, setState, user, events, change, setChange } =
+  const { state,  user,  setChange } =
     useContext(UserContext);
-  console.log(state);
+
   useEffect(() => {}, []);
   const [labels, setLabels] = useState(label);
-  const [time, setTime] = useState(moment(Date.now()).format("HH:mm"));
-  const [dates, setDates] = useState("");
-  const [file, setFile] = useState("");
-  const [progresspercent, setProgresspercent] = useState(0);
-  const [selectedOption, setSelectedOption] = useState();
-  const [imgUrl, setImgUrl] = useState("");
-  const [event, setEvent] = useState({
-    Event_Name: "",
-    Event_State: "",
-    Event_Place: "",
-    Event_Category: "",
-    Event_Date: "",
-    Event_Time: "",
-    Event_poster: "",
-    Event_User: "",
-    Event_Search: [],
-  });
-
-  useEffect(() => {}, [labels]);
 
   const getFile = (e) => {
     if (Array.isArray(e)) {
@@ -72,36 +41,8 @@ const AddEvent = ({ label }) => {
       },
     ],
   };
-  // async function onSubmit(fieldsValue) {
-  //   console.log(fieldsValue);
-
-  //   setEvent({
-  //     ...event,
-  //     Event_Name: fieldsValue.Event_Name,
-  //     Event_Place: fieldsValue.Event_Place,
-  //     Event_State: fieldsValue.Event_State,
-  //     Event_Category: selectedOption,
-  //     Event_poster: imgUrl,
-  //   });
-
-  //   setDoc(doc(db, "Events", `${fieldsValue.Event_Name}`), {
-  //     ...event,
-  //     Event_Name: fieldsValue.Event_Name,
-  //     Event_Place: fieldsValue.Event_Place,
-  //     Event_State: fieldsValue.Event_State,
-  //     Event_Category: selectedOption,
-  //     Event_poster: imgUrl,
-  //   })
-  //     .then(() => {
-  //       console.log("doc added");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }
 
   const onFinish = async (values) => {
-    console.log("Success:", values);
     let imageUrl = "";
     if (values.banner.length) {
       if (values.banner[0].url) {
@@ -110,12 +51,17 @@ const AddEvent = ({ label }) => {
         imageUrl = await fileUpload(values.banner[0].originFileObj);
       }
     }
-    console.log(imageUrl);
-    console.log(dayjs(values.Event_Time).format("HH:mm"));
+
     let array = values.Event_Name.split(" ");
     array.push(values.Event_Name);
-
-    setDoc(doc(db, "Events", `${values.Event_Name}`), {
+    let id;
+    if (state.id) {
+      id = state.id;
+    } else {
+      id = doc(collection(db, "Events")).id;
+    }
+    setDoc(doc(db, "Events", `${id}`), {
+      id,
       Event_Name: values.Event_Name,
       Event_Place: values.Event_Place,
       Event_State: values.Event_State,
@@ -145,7 +91,6 @@ const AddEvent = ({ label }) => {
         return getDownloadURL(snapshot.ref).then((downloadURL) => downloadURL);
       });
     } catch (e) {
-      console.log("Error-file-upload", e);
       return false;
     }
   };

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Col, Row, Space, Statistic, Table } from "antd";
+import { Space, Table } from "antd";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../../../UserProvider";
 import {
@@ -13,20 +13,18 @@ import {
 import { db } from "../../../Firebase/firebase";
 
 const Myevent = () => {
-  const { events, state, setState, setEvents, user, change } =
-    useContext(UserContext);
-  const [deleted, setDeleted] = useState(false);
+  const { events, setState, setEvents, user, change } = useContext(UserContext);
 
   async function getdetails() {
     const eventsof = collection(db, "Events");
     const q = query(eventsof, where("Event_user", "==", `${user.email}`));
     const querySnapshot = await getDocs(q);
     const userlist = querySnapshot.docs.map((doc) => doc.data());
-    console.log(userlist, "`12345666");
+
     const EventSnapshot = await getDocs(eventsof);
     const eventList = EventSnapshot.docs.map((doc) => doc.data());
 
-    setEvents({list:userlist});
+    setEvents({ list: userlist });
   }
 
   useEffect(() => {
@@ -38,8 +36,7 @@ const Myevent = () => {
 
     getdetails();
   }
- 
-  
+
   const columns = [
     {
       title: "Event Name",
@@ -74,33 +71,11 @@ const Myevent = () => {
       ),
     },
   ];
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
-    },
-  ];
+
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-[900px]">
-        <Table columns={columns} dataSource={events.list} />
+        <Table key='id' columns={columns} dataSource={events.list} />
       </div>
     </div>
   );

@@ -1,15 +1,9 @@
-import { collection, getDocs } from "firebase/firestore";
-import React, { useContext, useEffect } from "react";
-import { db } from "../../../Firebase/firebase";
-import { getEvents } from "../../../Firebase/firebaseutils";
+import React, { useContext } from "react";
 import { UserContext } from "../../../UserProvider";
 import Events from "./Events";
 import SectionHeader from "./SectionHeader";
 
 const Homepage = () => {
-  const { events, setEvents } = useContext(UserContext);
-
-
   return (
     <div>
       <SectionHeader />

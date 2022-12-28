@@ -1,5 +1,5 @@
 import { signOut } from "firebase/auth";
-import React, { useContext, useState } from "react";
+import React, { useContext} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { auth } from "../../Firebase/firebase";
 import { UserContext } from "../../UserProvider";
@@ -12,10 +12,10 @@ const Header = () => {
     signOut(auth)
       .then(() => {
         checkAuthentication();
-        console.log("Logged out");
+        
       })
       .catch((error) => {
-        console.log(error);
+     
       });
 
     navigate("/");
@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <header className="shadow-lg h-24 flex w-full justify-center items-center">
-      <div className="container  flex items-center justify-between px-[100px] ">
+      <div className="container  flex items-center justify-between px-[100px]   ">
         <NavLink to="/">
           <section className="left_header w-80">
             {/* Event logo with image */}Home

@@ -41,19 +41,19 @@ const UserProvider = ({ children }) => {
   }, []);
 
   const checkAuthentication = async () => {
-    console.log("ji");
+ 
     const auth = await authorize();
 
     if (auth) {
       setUser(auth);
-      console.log(auth);
+   
     } else {
       setUser(null);
-      console.log("no user");
+     
     }
   };
 
-  console.log(events,"jkooo");
+  
   return (
     <UserContext.Provider
       value={{
