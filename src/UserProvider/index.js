@@ -8,7 +8,7 @@ export const UserContext = React.createContext({
   user: null,
   setUser: () => null,
   checkAuthentication: () => null,
-  events: [],
+  events: {list:[],lastkey:null},
   setEvents: () => null,
   state: null,
   setState: () => null,
@@ -18,7 +18,7 @@ export const UserContext = React.createContext({
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); //used in header component,
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState({list:[],lastkey:null});
   const [state, setState] = useLocalStorage("state", {});
   //  const [localStorage, setLocalStorage] = useLocalStorage("localstorage",{});
   const [change, setChange] = useState(false);
@@ -53,6 +53,7 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  console.log(events,"jkooo");
   return (
     <UserContext.Provider
       value={{

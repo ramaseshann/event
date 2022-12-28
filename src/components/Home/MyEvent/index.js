@@ -26,20 +26,20 @@ const Myevent = () => {
     const EventSnapshot = await getDocs(eventsof);
     const eventList = EventSnapshot.docs.map((doc) => doc.data());
 
-    setEvents(userlist);
+    setEvents({list:userlist});
   }
 
   useEffect(() => {
-    if(user)
-    getdetails();
-  }, [change,user]);
+    if (user) getdetails();
+  }, [change, user]);
 
   async function handleDelete(e, record) {
     await deleteDoc(doc(db, "Events", `${record.Event_Name}`));
- 
+
     getdetails();
   }
-
+ 
+  
   const columns = [
     {
       title: "Event Name",
@@ -100,7 +100,7 @@ const Myevent = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-[900px]">
-        <Table columns={columns} dataSource={events} />
+        <Table columns={columns} dataSource={events.list} />
       </div>
     </div>
   );

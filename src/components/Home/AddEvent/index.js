@@ -136,7 +136,6 @@ const AddEvent = ({ label }) => {
   function onFinishFailed() {}
 
   const fileUpload = async (file, name = "test", path = "") => {
-    
     try {
       const storage = getStorage();
       const storageRef = ref(storage, file.name);
@@ -149,7 +148,6 @@ const AddEvent = ({ label }) => {
       console.log("Error-file-upload", e);
       return false;
     }
-   
   };
 
   return (

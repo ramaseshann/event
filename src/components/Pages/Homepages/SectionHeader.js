@@ -11,52 +11,50 @@ const SectionHeader = () => {
   const { events, setEvents } = useContext(UserContext);
   const { Option } = Select;
 
-
-  useEffect(()=>{
+  useEffect(() => {
     listEvents();
-
-  },[])
+  }, []);
 
   const onFinish = (values) => {
     console.log("Success:", values);
     listEvents(values);
-//     async function getEvents() {
-//       const eventsof = collection(db, "Events");
-//       const EventSnapshot = await getDocs(eventsof);
-//       const eventList = EventSnapshot.docs.map((doc) => doc.data());
-//       const nextToken = EventSnapshot.docs[EventSnapshot.docs.length - 1];
-//       console.log(eventList, "nthai");
-//       setEvents(eventList);
-//       console.log("jinnnnn");
-//     }
+    //     async function getEvents() {
+    //       const eventsof = collection(db, "Events");
+    //       const EventSnapshot = await getDocs(eventsof);
+    //       const eventList = EventSnapshot.docs.map((doc) => doc.data());
+    //       const nextToken = EventSnapshot.docs[EventSnapshot.docs.length - 1];
+    //       console.log(eventList, "nthai");
+    //       setEvents(eventList);
+    //       console.log("jinnnnn");
+    //     }
 
-//     async function getdetails() {
-//       const eventsof = collection(db, "Events");
-//       const q = query(
-//         eventsof,
-//         where("Event_Category", "==", `${values.select_category}`)
-//       );
-//       const querySnapshot = await getDocs(q);
-//       const userlist = querySnapshot.docs.map((doc) => doc.data());
-//       const EventSnapshot = await getDocs(eventsof);
-//       setEvents(userlist);
-//     }
+    //     async function getdetails() {
+    //       const eventsof = collection(db, "Events");
+    //       const q = query(
+    //         eventsof,
+    //         where("Event_Category", "==", `${values.select_category}`)
+    //       );
+    //       const querySnapshot = await getDocs(q);
+    //       const userlist = querySnapshot.docs.map((doc) => doc.data());
+    //       const EventSnapshot = await getDocs(eventsof);
+    //       setEvents(userlist);
+    //     }
 
-//     if (values.select_category === "All_events" && values.keyword === "") {
-//       getEvents();
-//     } else if (
-//       values.select_category !== "All-events" &&
-//       values.keyword !== ""
-//     ) {
-//       getdetails();
-//     } else {
-//     }
-   };
+    //     if (values.select_category === "All_events" && values.keyword === "") {
+    //       getEvents();
+    //     } else if (
+    //       values.select_category !== "All-events" &&
+    //       values.keyword !== ""
+    //     ) {
+    //       getdetails();
+    //     } else {
+    //     }
+  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  const listEvents = async (values={}) => {
+  const listEvents = async (values = {},nextToken) => {
     let eventsof = collection(db, "Events");
     let EventSnapshot;
     let quer;
@@ -83,11 +81,18 @@ const SectionHeader = () => {
       EventSnapshot = await getDocs(eventsof);
     }
     console.log(EventSnapshot);
-    const userlist = EventSnapshot.docs.map((doc) => doc.data());
-    
-     setEvents(userlist);
-  };
+    let lastkey = null;
 
+    const userlist = EventSnapshot.docs.map((doc) => {
+      lastkey = doc;
+      return doc.data();
+    });
+   
+    setEvents({ list: userlist, filters:values,lastkey });
+
+    
+  };
+  console.log(events, "llllaago");
   return (
     <section className="h-[550px] flex flex-col gap-10 justify-center mt-10  ">
       <div className="flex flex-col">
@@ -123,11 +128,7 @@ const SectionHeader = () => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-          <Form.Item
-            className=" w-80"
-            name="select_category"
-           
-          >
+          <Form.Item className=" w-80" name="select_category">
             <Select placeholder="Select Category" className="">
               <Option value="music">Music</Option>
               <Option value="Dance">Dance</Option>
