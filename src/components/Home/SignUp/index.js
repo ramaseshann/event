@@ -16,8 +16,8 @@ const SignUp = () => {
       .catch((error) => {
         message.error(error.message);
       });
-
-    navigate("/signin");
+     
+    // navigate("/signin");
   };
   const onFinishFailed = (errorInfo) => {
     
