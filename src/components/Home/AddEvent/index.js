@@ -55,7 +55,7 @@ const AddEvent = ({ label }) => {
     let array = values.Event_Name.split(" ").map(item => item.toLowerCase());
     array.push(values.Event_Name);
     let id;
-    if (state.id) {
+    if (labels === "Edit Event" && state.id) {
       id = state.id;
     } else {
       id = doc(collection(db, "Events")).id;
