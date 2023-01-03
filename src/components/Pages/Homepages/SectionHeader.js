@@ -68,7 +68,7 @@ const SectionHeader = () => {
           className="flex  gap-10"
           name="basic"
           labelCol={{
-            span: 8,
+            span:18,
           }}
           wrapperCol={{
             span: 16,
@@ -80,7 +80,7 @@ const SectionHeader = () => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-          <Form.Item className=" w-80" name="select_category">
+          <Form.Item className=" " name="select_category">
             <Select placeholder="Select Category" className="">
               <Option value="Music">Music</Option>
               <Option value="Dance">Dance</Option>
