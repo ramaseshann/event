@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Space, Table } from "antd";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { UserContext } from "../../../UserProvider";
 import {
   collection,
@@ -13,11 +13,12 @@ import {
 import { db } from "../../../Firebase/firebase";
 
 const Myevent = () => {
+   let navigate = useNavigate();
   const { events, setState, setEvents, user, change } = useContext(UserContext);
 
   async function getdetails() {
     const eventsof = collection(db, "Events");
-    const q = query(eventsof, where("Event_user", "==", `${user.email}`));
+    const q = query(eventsof, where("Event_user", "==", `${user.uid}`));
     const querySnapshot = await getDocs(q);
     const userlist = querySnapshot.docs.map((doc) => doc.data());
 
@@ -63,9 +64,9 @@ const Myevent = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <NavLink to="edit" onClick={() => setState(record)}>
+          <div onClick={() => {navigate(`/my_events/edit/${record.Event_Name}`,{state:record}); setState(record)}}>
             Edit
-          </NavLink>
+          </div>
           <NavLink onClick={(e) => handleDelete(e, record)}>Delete</NavLink>
         </Space>
       ),

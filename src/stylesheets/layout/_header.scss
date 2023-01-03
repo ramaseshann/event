@@ -1,0 +1,29 @@
+:where(.css-dev-only-do-not-override-acm2ia).ant-row {
+    display: flex;
+    flex-flow: row wrap;
+    min-width: 0;
+}
+
+
+:where(.css-dev-only-do-not-override-acm2ia).ant-form-item .ant-form-item-control {
+    display: flex;
+    
+    flex-grow: 1;
+}
+:where(.css-dev-only-do-not-override-acm2ia)[class^="ant-form"] [class^="ant-form"], :where(.css-dev-only-do-not-override-acm2ia)[class*=" ant-form"] [class^="ant-form"] {
+    box-sizing: border-box;
+    width: fit-content;
+    display: flex;
+    justify-content: space-between;
+ 
+ 
+}
+
+:where(.css-dev-only-do-not-override-acm2ia)[class^="ant-form"] [class*=" ant-form"], :where(.css-dev-only-do-not-override-acm2ia)[class*=" ant-form"] [class*=" ant-form"] {
+    box-sizing: border-box;
+
+   
+   
+
+
+}

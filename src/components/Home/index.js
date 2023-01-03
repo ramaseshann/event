@@ -2,17 +2,23 @@ import React from 'react'
 import Header from '../Layout/Header'
 import SignIn from './SignIn'
 
-import {Routes, Route} from 'react-router-dom'
+import {Routes, Route, useParams} from 'react-router-dom'
 import MyEvent from './MyEvent'
 import Homepage from '../Pages/Homepages'
 import Jango from '../Jango'
 import SignUp from './SignUp'
 import AddEvent from './AddEvent'
 import EditEvent from './EditEvent'
+import User from './User'
+import UserDetails from './User/UserDetails'
+
 
 
 
 const Home = () => {
+
+ 
+  
   return (
     <div>
       <Header/>
@@ -21,10 +27,10 @@ const Home = () => {
 
         <Route path="/signup" element={<Jango><SignUp/></Jango>} />
         <Route path="/signin" element={<Jango><SignIn/></Jango>} />
-        <Route path="/addevents" element={<Jango><AddEvent label="Add Event"/></Jango>}/>
-        <Route path="/myevents" element={<MyEvent/>}/>
-        <Route exact path="/myevents/edit" element={<EditEvent/>}/>
-
+        <Route path="/add_events" element={<Jango><AddEvent label="Add Event"/></Jango>}/>
+        <Route path="/my_events" element={<MyEvent/>}/>
+        <Route exact path='/my_events/edit/:id' element={<EditEvent/>}/>
+       
       </Routes>
     
     

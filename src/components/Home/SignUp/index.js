@@ -12,6 +12,7 @@ const SignUp = () => {
         const user = userCredential.user;
 
         navigate("/signin");
+        message.success(`Welcome ,Signed Up Succesfully`);
       })
       .catch((error) => {
         message.error(error.message);

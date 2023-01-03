@@ -19,6 +19,7 @@ const SignIn = () => {
       .then((userCredential) => {
         checkAuthentication();
         navigate("/");
+        message.success("Successfully signed in");
       })
       .catch((error) => {
         message.error(error.message);

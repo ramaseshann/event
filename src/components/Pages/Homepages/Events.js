@@ -9,7 +9,8 @@ const Events = () => {
   useEffect(() => {});
 
   const loadmore = () => {
-    listEvents(events.filter || {}, events.lastkey).then((res) => {
+    console.log(events,"djabngii");
+    listEvents(events.filters|| {}, events.lastkey).then((res) => {
       setEvents({ ...res, list: [...events.list, ...res.list] });
     });
   };
@@ -48,10 +49,10 @@ const Events = () => {
                 </div>
                 <div className="flex flex-col">
                   <h3 className="flex ">
-                    {event.Event_Name} - {event.Event_Place}
+                    {event.Event_Name} - {event.Event_Category}
                   </h3>
                   <section className="flex flex-col">
-                    <h4 className="flex ">{event.Event_State}</h4>
+                    <h4 className="flex ">{event.Event_Place}-{event.Event_State}</h4>
                     <p className="flex">
                       {new Date(event.Event_Date).toDateString()} ,
                       <span className="text-red-800">{event.Event_Time}</span>

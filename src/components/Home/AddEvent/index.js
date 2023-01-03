@@ -3,6 +3,7 @@ import {
   DatePicker,
   Form,
   Input,
+  message,
   Select,
   TimePicker,
   Upload,
@@ -14,13 +15,24 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../../../Firebase/firebase";
 import { getDownloadURL } from "firebase/storage";
 import { UserContext } from "../../../UserProvider";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const AddEvent = ({ label }) => {
-  const { state,  user,  setChange } =
-    useContext(UserContext);
+  const { id } = useParams();
+  const location = useLocation();
 
-  useEffect(() => {}, []);
+  const { state, setState, user, setChange } = useContext(UserContext);
+
+  useEffect(() => {
+    if (id) {
+      if (location.state) {
+        console.log(location, "jijij");
+        // setState(location.state);
+      } else {
+      }
+    }
+  }, [location, id]);
+  console.log(state, "kathal");
   const [labels, setLabels] = useState(label);
 
   const getFile = (e) => {
@@ -42,6 +54,12 @@ const AddEvent = ({ label }) => {
     ],
   };
 
+  useEffect(() => {
+    return () => {
+      setState({});
+    };
+  }, []);
+ console.log(user,"user");
   const onFinish = async (values) => {
     let imageUrl = "";
     if (values.banner.length) {
@@ -52,7 +70,7 @@ const AddEvent = ({ label }) => {
       }
     }
 
-    let array = values.Event_Name.split(" ").map(item => item.toLowerCase());
+    let array = values.Event_Name.split(" ").map((item) => item.toLowerCase());
     array.push(values.Event_Name);
     let id;
     if (labels === "Edit Event" && state.id) {
@@ -60,6 +78,7 @@ const AddEvent = ({ label }) => {
     } else {
       id = doc(collection(db, "Events")).id;
     }
+    
     setDoc(doc(db, "Events", `${id}`), {
       id,
       Event_Name: values.Event_Name,
@@ -68,15 +87,21 @@ const AddEvent = ({ label }) => {
       Event_Category: values.Event_Category,
       Event_Date: dayjs(values.Event_Date).format("YYYY-MM-DD"),
       Event_Time: dayjs(values.Event_Time).format("HH:mm:ss"),
-      Event_user: user.email,
+      Event_user: user.uid,
       Event_search: array,
       Event_poster: imageUrl,
+
     });
     if (labels === "Edit Event") {
       setChange(true);
+      message.success("Event Updated Successfully");
+      
+    }else{
+      message.success("Event Added Successfully");
     }
 
-    navigate("/myevents");
+    navigate("/my_events");
+   
   };
 
   function onFinishFailed() {}
@@ -109,7 +134,7 @@ const AddEvent = ({ label }) => {
           span: 16,
         }}
         initialValues={
-          label === "Edit Event"
+          label === "Edit Event" && state
             ? {
                 remember: true,
                 Event_Name: state.Event_Name,
@@ -120,14 +145,14 @@ const AddEvent = ({ label }) => {
                 Event_Time: dayjs(state.Event_Time, "HH:mm:ss"),
                 banner: state.Event_poster ? [{ url: state.Event_poster }] : [],
               }
-            : ""
+            : {}
         }
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
-          label="Event Name"
+          label="Name"
           name="Event_Name"
           rules={[
             {
@@ -139,7 +164,7 @@ const AddEvent = ({ label }) => {
           <Input />
         </Form.Item>
         <Form.Item
-          label="Event State"
+          label="State"
           name="Event_State"
           rules={[
             {
@@ -151,7 +176,7 @@ const AddEvent = ({ label }) => {
           <Input />
         </Form.Item>
         <Form.Item
-          label="Event Place"
+          label="Place"
           name="Event_Place"
           rules={[
             {
@@ -162,7 +187,7 @@ const AddEvent = ({ label }) => {
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Event Category" name="Event_Category">
+        <Form.Item label="Category" name="Event_Category">
           <Select>
             <Select.Option value="Music">Music</Select.Option>
             <Select.Option value="Dance">Dance</Select.Option>
@@ -172,11 +197,11 @@ const AddEvent = ({ label }) => {
           </Select>
         </Form.Item>
 
-        <Form.Item name="Event_Date" label="Event Date" {...config}>
+        <Form.Item name="Event_Date" label=" Date" {...config}>
           <DatePicker format="YYYY-MM-DD " />
         </Form.Item>
 
-        <Form.Item name="Event_Time" label="Event Time">
+        <Form.Item name="Event_Time" label="Time">
           <TimePicker className="" />
         </Form.Item>
         <Form.Item

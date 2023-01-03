@@ -1,32 +1,55 @@
 import { Button, Form, Input, Select } from "antd";
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 // import Typical from "react-typical";
 import { listEvents } from "../../../Firebase/firebaseutils";
 import { UserContext } from "../../../UserProvider";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SectionHeader = () => {
-  
   const { events, setEvents } = useContext(UserContext);
   const { Option } = Select;
+  const [searchParams] = useSearchParams();
 
+
+  const navigate = useNavigate();
   useEffect(() => {
-    listEvents().then((res) => setEvents(res));
-  }, []);
+    
+    let editParams = {
+      // select_category: searchParams.get("select_category") || "",
+      // keyword: searchParams.get("keyword") || "",
+    };
+    for (const entry of searchParams.entries()) {
+      const [param, value] = entry;
+      editParams[param] = value?value === "undefined"?"":value:"";
+
+    }
+   
+    console.log({editParams},"params");
+    listEvents(editParams).then((res) => setEvents(res));
+  
+  }, [searchParams]);
+ 
 
   const onFinish = (values) => {
-   
-    listEvents(values).then((res) => setEvents(res));
-  };
-  const onFinishFailed = (errorInfo) => {
-    
-  };
+    console.log(values);
 
+    if (values.select_category || values.keyword) {
+   
+      navigate(
+        `/?select_category=${values.select_category}&keyword=${(values.keyword || "").toLowerCase()}`
+      );
+      //listEvents(values).then((res) => setEvents(res));
+    } else {
+      navigate(`/`);
+    }
+  };
+  const onFinishFailed = (errorInfo) => {};
 
   return (
     <section className="h-[550px] flex flex-col gap-10 justify-center mt-10  ">
       <div className="flex flex-col">
         <div className="text-[56px] text-bold items-center flex justify-center   ">
-          Discover  Events&nbsp;
+          Discover Events&nbsp;
           {/* <Typical
             loop={Infinity}
             wrapper="b"
@@ -42,7 +65,7 @@ const SectionHeader = () => {
       </p>
       <div className="flex justify-center">
         <Form
-          className="flex "
+          className="flex  gap-10"
           name="basic"
           labelCol={{
             span: 8,
@@ -59,7 +82,7 @@ const SectionHeader = () => {
         >
           <Form.Item className=" w-80" name="select_category">
             <Select placeholder="Select Category" className="">
-              <Option value="music">Music</Option>
+              <Option value="Music">Music</Option>
               <Option value="Dance">Dance</Option>
               <Option value="Sports">Sports</Option>
               <Option value="Entertainment">Entertainment</Option>
@@ -80,8 +103,9 @@ const SectionHeader = () => {
             <Input className="w-60" placeholder="Search by keyword" />
           </Form.Item>
           <Form.Item
+          className=" flex justify-center"
             wrapperCol={{
-              offset: 8,
+              offset: 0,
               span: 16,
             }}
           >
@@ -89,7 +113,7 @@ const SectionHeader = () => {
               type="primary"
               htmlType="submit"
               ype="primary"
-              className="bg-[#5ecdaa] text-white  w-32 h-10 "
+              className="bg-[#5ecdaa] w-32   text-white  h-8 "
             >
               Explore
             </Button>

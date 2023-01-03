@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { signOut } from "firebase/auth";
 import React, { useContext} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -12,10 +13,11 @@ const Header = () => {
     signOut(auth)
       .then(() => {
         checkAuthentication();
+        message.success('Successfully signed out');
         
       })
       .catch((error) => {
-     
+        message.error(error.message);
       });
 
     navigate("/");
@@ -29,16 +31,17 @@ const Header = () => {
             {/* Event logo with image */}Home
           </section>
         </NavLink>
+       
 
         <section className="right_header flex gap-10  justify-between items-center">
           {user && (
             <div className="flex items-center justify-between cursor-pointer">
-              <NavLink to="/addevents">Add events</NavLink>
+              <NavLink to="/add_events">Add events</NavLink>
             </div>
           )}
           {user && (
             <div className="flex items-center justify-between cursor-pointer">
-              <NavLink to="myevents">My events</NavLink>
+              <NavLink to="my_events">My events</NavLink>
             </div>
           )}
           {user === null && (
@@ -55,6 +58,8 @@ const Header = () => {
             {user === null ? "" : "Sign Out"}
           </div>
           <div></div>
+
+          
         </section>
       </div>
     </header>

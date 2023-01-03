@@ -39,6 +39,7 @@ const authorize = () => {
 // }
 
 export const listEvents = async (values = {}, nextToken = false) => {
+  console.log({values,nextToken},"listevents");
   let eventsof = collection(db, "Events");
   let EventSnapshot;
   let quer;
