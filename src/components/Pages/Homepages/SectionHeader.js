@@ -63,7 +63,7 @@ const SectionHeader = () => {
       <p className="flex  justify-center text-gray-600">
         20M People Exploring Events every month
       </p>
-      <div className="border-2 flex justify-center">
+      <div className="flex justify-center">
         <Form
           layout="inline"
           className=""
