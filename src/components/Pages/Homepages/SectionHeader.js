@@ -65,7 +65,7 @@ const SectionHeader = () => {
       </p>
       <div className="flex justify-center">
         <Form
-          className="flex  gap-10"
+          className="flex ml-20 gap-10"
           name="basic"
           labelCol={{
             span: 8,
@@ -113,7 +113,7 @@ const SectionHeader = () => {
               type="primary"
               htmlType="submit"
               ype="primary"
-              className="bg-[#5ecdaa] w-32   text-white  h-8 "
+              className="bg-[#5ecdaa] w-32  text-white  h-8 "
             >
               Explore
             </Button>

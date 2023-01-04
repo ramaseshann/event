@@ -60,12 +60,13 @@ const SignIn = () => {
               },
             ]}
           >
-            <Input className="w-80" />
+            <Input className="w-96" />
           </Form.Item>
 
           <Form.Item
             label="Password"
             name="password"
+            className=""
             rules={[
               {
                 required: true,
@@ -73,7 +74,7 @@ const SignIn = () => {
               },
             ]}
           >
-            <Input.Password className="w-80" />
+            <Input.Password className="w-80   " />
           </Form.Item>
 
           <Form.Item
