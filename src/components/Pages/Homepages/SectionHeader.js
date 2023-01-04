@@ -63,9 +63,10 @@ const SectionHeader = () => {
       <p className="flex  justify-center text-gray-600">
         20M People Exploring Events every month
       </p>
-      <div className="flex justify-center">
+      <div className="border-2 flex justify-center">
         <Form
-          className="flex ml-20 gap-10"
+          layout="inline"
+          className=""
           name="basic"
           labelCol={{
             span: 8,
@@ -73,6 +74,7 @@ const SectionHeader = () => {
           wrapperCol={{
             span: 16,
           }}
+          style={{}}
           initialValues={{
             remember: true,
           }}
@@ -81,7 +83,9 @@ const SectionHeader = () => {
           autoComplete="off"
         >
           <Form.Item className=" " name="select_category">
-            <Select placeholder="Select Category" className="">
+            <Select placeholder="Select Category" className="" style={{
+              width: "200px",
+            }}>
               <Option value="Music">Music</Option>
               <Option value="Dance">Dance</Option>
               <Option value="Sports">Sports</Option>
@@ -100,10 +104,12 @@ const SectionHeader = () => {
               },
             ]}
           >
-            <Input className="w-60" placeholder="Search by keyword" />
+            <Input style={{
+              width: "200px",
+            }} placeholder="Search by keyword" />
           </Form.Item>
           <Form.Item
-          className=" flex justify-center"
+          className=" "
             wrapperCol={{
               offset: 0,
               span: 16,

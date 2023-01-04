@@ -60,7 +60,7 @@ const SignIn = () => {
               },
             ]}
           >
-            <Input className="w-96" />
+            <Input className="w-80" />
           </Form.Item>
 
           <Form.Item
